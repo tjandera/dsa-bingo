@@ -1,0 +1,254 @@
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Outfit:wght@400;500;600&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Cormorant Garamond", ui-serif, Georgia, "Times New Roman", serif;
+  --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
+
+  --color-navy: #0f1b2e;
+  --color-navy-deep: #0a1220;
+  --color-navy-lift: #16243c;
+  --color-navy-cell: #132036;
+  --color-gold: #d3a330;
+  --color-gold-bright: #e8c056;
+  --color-gold-dim: #a07c24;
+  --color-cream: #f4ebd8;
+  --color-muted: #8b97ab;
+  --color-line: color-mix(in oklab, var(--color-gold) 38%, transparent);
+
+  --color-node-red: #e15b4a;
+  --color-node-cyan: #4ec6e0;
+  --color-node-blue: #8bb4e0;
+  --color-node-green: #6bb24a;
+  --color-node-silver: #c8ccd2;
+  --color-node-slate: #7a8a9a;
+
+  --text-cell: 0.72rem;
+  --text-cell--line-height: 1.22;
+  --text-kicker: 0.6875rem;
+  --text-name: 0.7rem;
+  --text-name--line-height: 1.15;
+  --text-prompt: 0.58rem;
+  --text-prompt--line-height: 1.15;
+
+
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-card: 24px;
+
+  --tracking-card: 0.22em;
+  --tracking-title: 0.16em;
+
+  --motion-stagger: 40ms;
+  --motion-micro: 80ms;
+  --motion-quick: 150ms;
+  --motion-fast: 250ms;
+  --motion-medium: 350ms;
+  --motion-slow: 400ms;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-smooth-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-scale-modal: 0.96;
+}
+
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  html,
+  body,
+  #app {
+    min-height: 100dvh;
+    background: var(--color-navy-deep);
+    color: var(--color-cream);
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+}
+
+@layer components {
+  .bingo-shell {
+    background:
+      radial-gradient(ellipse 80% 50% at 50% -10%, color-mix(in oklab, var(--color-gold) 14%, transparent), transparent 60%),
+      var(--color-navy-deep);
+  }
+
+  .bingo-card {
+    border: 1px solid color-mix(in oklab, var(--color-gold) 42%, transparent);
+    box-shadow:
+      0 0 0 1px color-mix(in oklab, var(--color-gold) 12%, transparent),
+      0 24px 64px color-mix(in oklab, #000 45%, transparent);
+    background: linear-gradient(
+      180deg,
+      color-mix(in oklab, var(--color-navy-lift) 70%, var(--color-navy)) 0%,
+      var(--color-navy) 100%
+    );
+  }
+
+  .bingo-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 1px;
+    padding: 1px;
+    background: color-mix(in oklab, var(--color-gold) 40%, transparent);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+  }
+
+  .bingo-cell {
+    aspect-ratio: 1;
+    min-width: 0;
+    overflow: hidden;
+    background: var(--color-navy-cell);
+    color: var(--color-cream);
+    transition:
+      background-color var(--motion-fast) var(--ease-out),
+      color var(--motion-fast) var(--ease-out),
+      box-shadow var(--motion-fast) var(--ease-out);
+  }
+
+  .bingo-cell[data-marked="true"] {
+    background: color-mix(in oklab, var(--color-gold) 22%, var(--color-navy));
+    color: var(--color-cream);
+  }
+
+  .bingo-cell[data-line="true"] {
+    box-shadow: inset 0 0 0 1.5px var(--color-gold);
+    background: color-mix(in oklab, var(--color-gold) 32%, var(--color-navy));
+  }
+
+  .bingo-cell[data-free="true"] {
+    background: color-mix(in oklab, var(--color-gold) 10%, var(--color-navy-cell));
+  }
+
+  .cell-cross {
+    pointer-events: none;
+    position: absolute;
+    inset: 12%;
+  }
+
+  .cell-cross::before,
+  .cell-cross::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 1.5px;
+    height: 100%;
+    background: color-mix(in oklab, var(--color-gold) 72%, transparent);
+  }
+
+  .cell-cross::before {
+    transform: translateX(-50%) rotate(32deg);
+  }
+
+  .cell-cross::after {
+    transform: translateX(-50%) rotate(-32deg);
+  }
+
+  .name-field {
+    height: 44px;
+    width: 100%;
+    border-radius: var(--radius-sm);
+    border: 1px solid color-mix(in oklab, var(--color-gold) 40%, transparent);
+    background: var(--color-navy);
+    padding: 0 12px;
+    color: var(--color-cream);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+  }
+
+  .name-field::placeholder {
+    color: var(--color-muted);
+  }
+
+  .name-field:focus {
+    outline: none;
+    border-color: var(--color-gold);
+    box-shadow: 0 0 0 2px color-mix(in oklab, var(--color-gold) 35%, transparent);
+  }
+
+  .win-overlay {
+    animation: modal-in var(--motion-fast) var(--ease-smooth-out) both;
+  }
+
+  .stagger-in {
+    animation: card-enter var(--motion-slow) var(--ease-smooth-out) both;
+  }
+
+  .win-panel {
+    border: 1px solid color-mix(in oklab, var(--color-gold) 50%, transparent);
+    background: var(--color-navy-lift);
+    box-shadow: 0 20px 50px color-mix(in oklab, #000 40%, transparent);
+  }
+
+  .confetti-bit {
+    position: absolute;
+    top: -8px;
+    width: 6px;
+    height: 10px;
+    border-radius: 1px;
+    background: var(--color-gold);
+    animation: confetti-fall 1.2s var(--ease-out) forwards;
+  }
+}
+
+@keyframes card-enter {
+  from {
+    opacity: 0;
+    transform: translateY(var(--motion-y-medium, 12px));
+    filter: blur(var(--motion-blur-sm, 2px));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: scale(var(--motion-scale-modal));
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes confetti-fall {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--drift, 20px), 220px, 0) rotate(220deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stagger-in,
+  .win-overlay,
+  .confetti-bit {
+    animation: none;
+  }
+
+  .bingo-cell {
+    transition: none;
+  }
+}
