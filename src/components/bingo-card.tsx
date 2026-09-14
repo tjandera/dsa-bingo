@@ -112,25 +112,25 @@ export function BingoApp() {
   const editingPrompt = editingCell?.kind === "prompt" ? editingCell.text : "";
 
   return (
-    <main className="bingo-shell flex min-h-dvh items-start justify-center px-3 py-5 sm:items-center sm:px-4 sm:py-10">
+    <main className="bingo-shell flex min-h-dvh items-start justify-center sm:items-center">
       <section
-        className="bingo-card stagger-in relative w-full max-w-sm overflow-hidden rounded-card px-4 pb-5 pt-5 sm:px-5 sm:pb-6 sm:pt-6"
+        className="bingo-card stagger-in relative w-full max-w-sm overflow-hidden rounded-card px-3 pb-4 pt-4 sm:px-5 sm:pb-6 sm:pt-6"
         aria-label="DSA bingo card"
       >
-        <header className="mb-4 flex flex-col items-center text-center">
+        <header className="mb-3 flex flex-col items-center text-center sm:mb-4">
           <img
             src="/dsa-logo.png"
             alt="DSA Society"
             width={252}
             height={114}
-            className="h-auto w-[11.5rem] sm:w-[13rem]"
+            className="h-auto w-[9.25rem] sm:w-[13rem]"
           />
-          <h1 className="mt-3 font-display text-2xl font-semibold tracking-title text-gold">
+          <h1 className="mt-2 font-display text-xl font-semibold tracking-title text-gold sm:mt-3 sm:text-2xl">
             DSA Bingo Card
           </h1>
-          <p className="mt-1.5 max-w-xs font-sans text-xs leading-relaxed text-muted">
-            Find a student who matches a square, tap it, and write their name.
-            The box is crossed. Five in a row wins.
+          <p className="mt-1 max-w-[18rem] font-sans text-[11px] leading-snug text-muted sm:mt-1.5 sm:max-w-xs sm:text-xs sm:leading-relaxed">
+            Tap a square, write the student’s name, and it’s crossed. Five in a
+            row wins.
           </p>
         </header>
 
@@ -156,9 +156,9 @@ export function BingoApp() {
                   data-free="true"
                   data-marked="true"
                   data-line={onLine ? "true" : "false"}
-                  className="bingo-cell flex items-center justify-center p-1.5"
+                  className="bingo-cell flex items-center justify-center p-1"
                 >
-                  <DsaMark className="size-12" />
+                  <DsaMark className="size-9 sm:size-12" />
                   <span className="sr-only">Free</span>
                 </div>
               );
@@ -175,7 +175,7 @@ export function BingoApp() {
                 data-line={onLine ? "true" : "false"}
                 onClick={() => setEditing(index)}
                 className={cn(
-                  "bingo-cell relative flex min-w-0 items-center justify-center px-1 py-1 text-center font-sans text-cell font-medium",
+                  "bingo-cell relative flex min-w-0 items-center justify-center px-0.5 py-0.5 text-center font-sans text-cell font-medium sm:px-1 sm:py-1",
                   "touch-manipulation select-none whitespace-normal",
                 )}
               >
@@ -200,8 +200,8 @@ export function BingoApp() {
           })}
         </div>
 
-        <footer className="mt-4 flex items-center justify-between gap-3">
-          <p className="font-sans text-xs tabular-nums text-muted">
+        <footer className="mt-3 flex items-center justify-between gap-3 sm:mt-4">
+          <p className="font-sans text-[11px] tabular-nums text-muted sm:text-xs">
             <span className="text-cream">{markedCount}</span>
             <span> / 24 marked</span>
             {lines.length > 0 ? (
@@ -271,18 +271,19 @@ function NameDialog({
 
   return (
     <div
-      className="absolute inset-0 z-10 flex items-center justify-center bg-navy/80 px-5"
+      className="fixed inset-0 z-30 flex items-end justify-center bg-navy/80 sm:items-center sm:px-5"
       role="dialog"
       aria-modal="true"
       aria-labelledby="name-dialog-title"
     >
       <form
-        className="win-overlay win-panel w-full rounded-lg px-5 py-6"
+        className="name-sheet win-overlay win-panel px-5 pb-5 pt-4 sm:rounded-lg sm:py-6"
         onSubmit={(event) => {
           event.preventDefault();
           onSave(value);
         }}
       >
+        <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-gold/35 sm:hidden" aria-hidden="true" />
         <p className="font-sans text-kicker font-medium uppercase tracking-card text-gold">
           Who matches?
         </p>
@@ -301,24 +302,26 @@ function NameDialog({
             maxLength={NAME_MAX}
             autoComplete="off"
             autoCapitalize="words"
+            enterKeyHint="done"
+            inputMode="text"
             placeholder="Type their name"
             onChange={(event) => setValue(event.target.value)}
           />
         </label>
         <div className="mt-4 flex flex-col gap-2">
-          <Button type="submit" className="w-full" disabled={!value.trim()}>
+          <Button type="submit" className="h-12 w-full" disabled={!value.trim()}>
             {filled ? "Update name" : "Save and cross"}
           </Button>
           <div className="flex gap-2">
             {filled ? (
-              <Button type="button" variant="outline" className="flex-1" onClick={onClear}>
+              <Button type="button" variant="outline" className="h-12 flex-1" onClick={onClear}>
                 Clear square
               </Button>
             ) : null}
             <Button
               type="button"
               variant={filled ? "ghost" : "outline"}
-              className="flex-1"
+              className="h-12 flex-1"
               onClick={onCancel}
             >
               Cancel
@@ -348,12 +351,12 @@ function WinOverlay({
 
   return (
     <div
-      className="absolute inset-0 z-20 flex items-center justify-center bg-navy/80 px-6"
+      className="fixed inset-0 z-40 flex items-center justify-center bg-navy/80 px-5"
       role="dialog"
       aria-modal="true"
       aria-labelledby="bingo-win-title"
     >
-      <div className="win-overlay win-panel relative w-full overflow-hidden rounded-lg px-6 py-8 text-center">
+      <div className="win-overlay win-panel relative w-full max-w-sm overflow-hidden rounded-lg px-6 py-8 text-center">
         {CONFETTI.map((bit, i) => (
           <span
             key={i}

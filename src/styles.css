@@ -23,13 +23,13 @@
   --color-node-silver: #c8ccd2;
   --color-node-slate: #7a8a9a;
 
-  --text-cell: 0.72rem;
-  --text-cell--line-height: 1.22;
+  --text-cell: clamp(0.58rem, 2.7vw, 0.72rem);
+  --text-cell--line-height: 1.18;
   --text-kicker: 0.6875rem;
-  --text-name: 0.7rem;
-  --text-name--line-height: 1.15;
-  --text-prompt: 0.58rem;
-  --text-prompt--line-height: 1.15;
+  --text-name: clamp(0.58rem, 2.6vw, 0.7rem);
+  --text-name--line-height: 1.12;
+  --text-prompt: clamp(0.5rem, 2.2vw, 0.58rem);
+  --text-prompt--line-height: 1.12;
 
 
   --radius-xs: 4px;
@@ -62,12 +62,16 @@
   html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
+    text-size-adjust: 100%;
   }
 
   html,
   body,
   #app {
     min-height: 100dvh;
+    min-height: 100svh;
+    overflow-x: hidden;
     background: var(--color-navy-deep);
     color: var(--color-cream);
   }
@@ -84,6 +88,19 @@
     background:
       radial-gradient(ellipse 80% 50% at 50% -10%, color-mix(in oklab, var(--color-gold) 14%, transparent), transparent 60%),
       var(--color-navy-deep);
+    padding-left: max(0.75rem, env(safe-area-inset-left));
+    padding-right: max(0.75rem, env(safe-area-inset-right));
+    padding-top: max(0.5rem, env(safe-area-inset-top));
+    padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+  }
+
+  @media (min-width: 640px) {
+    .bingo-shell {
+      padding-top: max(2.5rem, env(safe-area-inset-top));
+      padding-bottom: max(2.5rem, env(safe-area-inset-bottom));
+      padding-left: max(1rem, env(safe-area-inset-left));
+      padding-right: max(1rem, env(safe-area-inset-right));
+    }
   }
 
   .bingo-card {
@@ -160,7 +177,7 @@
   }
 
   .name-field {
-    height: 44px;
+    height: 48px;
     width: 100%;
     border-radius: var(--radius-sm);
     border: 1px solid color-mix(in oklab, var(--color-gold) 40%, transparent);
@@ -168,7 +185,7 @@
     padding: 0 12px;
     color: var(--color-cream);
     font-family: var(--font-sans);
-    font-size: 1rem;
+    font-size: 16px;
   }
 
   .name-field::placeholder {
@@ -183,6 +200,26 @@
 
   .win-overlay {
     animation: modal-in var(--motion-fast) var(--ease-smooth-out) both;
+  }
+
+  .name-sheet {
+    width: 100%;
+    max-width: 24rem;
+  }
+
+  @media (max-width: 639px) {
+    .name-sheet {
+      max-width: none;
+      border-radius: 20px 20px 0 0;
+      padding-bottom: max(1.25rem, env(safe-area-inset-bottom));
+    }
+  }
+
+  @media (max-height: 720px) {
+    .bingo-card {
+      padding-top: 0.85rem;
+      padding-bottom: 0.85rem;
+    }
   }
 
   .stagger-in {
